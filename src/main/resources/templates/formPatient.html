@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${editMode} ? 'Modifier Patient' : 'Ajouter Patient'"></title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white fw-semibold fs-5">
+            <i class="bi bi-person"></i>
+            <span th:text="${editMode} ? 'Modifier Patient' : 'Ajouter Patient'"></span>
+        </div>
+        <div class="card-body bg-primary-subtle">
+            <form th:action="${editMode} ? @{/updatePatient} : @{/savePatient}" th:object="${patient}" method="post" class="row g-3">
+                <input type="hidden" th:if="${editMode}" th:field="*{id}" />
+                <div class="col-md-6">
+                    <label for="name" class="form-label text-danger fw-bold">Nom</label>
+                    <input type="text" th:field="*{name}" class="form-control border-primary" id="name" placeholder="Nom du patient" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="dateNaissance" class="form-label text-danger fw-bold">Date de naissance</label>
+                    <input type="date" th:field="*{dateNaissance}" class="form-control border-primary" id="dateNaissance" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('dateNaissance')}" th:errors="*{dateNaissance}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="maladie" class="form-label text-danger fw-bold">Malade</label>
+                    <select th:field="*{maladie}" class="form-select border-primary" id="maladie">
+                        <option th:value="true" th:selected="${patient.maladie != null and patient.maladie}">Oui</option>
+                        <option th:value="false" th:selected="${patient.maladie != null and !patient.maladie}">Non</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="score" class="form-label text-danger fw-bold">Score</label>
+                    <input type="number" th:field="*{score}" class="form-control border-primary" id="score" min="0" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('score')}" th:errors="*{score}"></div>
+                </div>
+                <div class="col-12 d-flex justify-content-between mt-4">
+                    <a th:href="@{/index}" class="btn btn-outline-danger"><i class="bi bi-arrow-left"></i> Retour</a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> <span th:text="${editMode} ? 'Modifier' : 'Ajouter'"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
